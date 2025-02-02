@@ -1,7 +1,6 @@
 # ---- Build Stage ----
-    ARG NODE_VERSION=20.11
-    FROM node:${NODE_VERSION}-alpine3.19 AS builder
-    
+    FROM node:23.7-alpine3.20  AS builder
+
     # Set working directory
     WORKDIR /app
     
@@ -18,7 +17,7 @@
     RUN npm run build
     
     # ---- Production Stage ----
-    FROM node:${NODE_VERSION}-alpine3.19 AS production
+    FROM node:23.7-alpine3.20  AS production
     
     # Add curl for healthcheck
     RUN apk add --no-cache curl
@@ -51,7 +50,7 @@
     
     # Health check using curl
     HEALTHCHECK --interval=30s --timeout=3s \
-      CMD curl -f http://localhost:3000/health || exit 1
+        CMD curl -f http://localhost:3000/health || exit 1
     
     # Start the application
     CMD ["npx", "serve", "-s", "dist", "-l", "3000"]
